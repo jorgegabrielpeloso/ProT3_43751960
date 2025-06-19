@@ -7,7 +7,15 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
     protected $table = 'usuarios';
-    protected $primaryKey = 'id';
-    protected $allowedFields = ['nombre', 'apellido', 'email', 'password'];
-    protected $useTimestamps = false; // Desactivar timestamps
+    protected $primaryKey = 'id_usuario';
+    protected $allowedFields = [
+        'nombre',
+        'apellido',
+        'usuario',
+        'email',
+        'pass',
+        'perfil_id',
+        'baja',
+        'created_at'
+    ];
 }

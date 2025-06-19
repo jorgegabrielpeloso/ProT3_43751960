@@ -3,53 +3,46 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use CodeIgniter\Controller;
 
-class SigninController extends BaseController
+class SigninController extends Controller
 {
     public function index()
     {
-        // Evita que usuarios logueados vean esta vista
-        if (session()->get('isLoggedIn')) {
-            return redirect()->to('/profile');
-        }
+        $data['titulo'] = 'Iniciar Sesión';
 
-        helper(['form']);
-        echo view('front/head_view')
-            . view('front/navbar_view')
-            . view('front/login')
-            . view('front/footer_view');
+        echo view('front/head_view', $data);
+        echo view('front/navbar_view');
+        echo view('back/usuario/login', $data);
+        echo view('front/footer_view');
     }
 
     public function loginAuth()
     {
         $session = session();
         $userModel = new UserModel();
-        $email = $this->request->getVar('email');
-        $password = $this->request->getVar('password');
 
-        $user = $userModel->where('email', $email)->first();
+        $userOrEmail = $this->request->getVar('usuario');
+        $password = $this->request->getVar('pass');
 
-        if ($user) {
-            $pass = $user['password'];
-            $authenticatePassword = password_verify($password, $pass);
-            if ($authenticatePassword) {
-                $ses_data = [
-                    'id' => $user['id'],
-                    'nombre' => $user['nombre'],
-                    'apellido' => $user['apellido'],
-                    'email' => $user['email'],
-                    'isLoggedIn' => TRUE
-                ];
-                $session->set($ses_data);
-                return redirect()->to('/profile');
-            } else {
-                $session->setFlashdata('msg', 'Contraseña incorrecta.');
-                return redirect()->to('/login');
-            }
-        } else {
-            $session->setFlashdata('msg', 'El email no existe.');
-            return redirect()->to('/login');
+        $user = $userModel->where('usuario', $userOrEmail)
+                          ->orWhere('email', $userOrEmail)
+                          ->first();
+
+        if ($user && password_verify($password, $user['pass'])) {
+            $sessionData = [
+                'id_usuario' => $user['id_usuario'],
+                'usuario'    => $user['usuario'],
+                'nombre'     => $user['nombre'],
+                'perfil_id'  => $user['perfil_id'],
+                'logged_in'  => true
+            ];
+            $session->set($sessionData);
+            return redirect()->to('/profile');
         }
+
+        $session->setFlashdata('error', 'Usuario o contraseña incorrectos');
+        return redirect()->to('/login');
     }
 
     public function logout()
