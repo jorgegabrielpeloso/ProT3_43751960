@@ -48,44 +48,67 @@
   </div>
 </div>
 <!-- Sección de Productos Destacados -->
-<div class="container my-4">
-  <h2 class="text-center">Productos Destacados</h2>
-  <div class="row justify-content-center">
-    <!-- Tarjeta 1 -->
-    <div class="col-sm-6 col-md-4 mb-3">
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Productos Destacados</h2>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+
+    <!-- CARD 1 -->
+    <div class="col">
       <div class="card h-100">
-        <img src="public/assets/img/argentina.png" class="card-img-top" alt="Camiseta">
-        <div class="card-body d-flex flex-column">
+        <img src="<?= base_url('public/assets/img/argentina.png') ?>" class="card-img-top" alt="Camiseta Argentina 90s">
+        <div class="card-body">
           <h5 class="card-title">Camiseta Clásica 90's</h5>
           <p class="card-text">Revive los mejores momentos del fútbol con esta camiseta icónica de los años 90.</p>
-          <p class="card-text fw-bold">$59000.99</p>
-          <button class="btn btn-success mt-auto">Agregar al carrito</button>
+          <p><strong>$59000.99</strong></p>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-sm btn-success">
+            <i class="bi bi-cart-plus"></i> Agregar
+          </button>
         </div>
       </div>
     </div>
-    <!-- tarjeta -->
-     <div class="col-sm-6 col-md-4 mb-3">
+
+    <!-- CARD 2 -->
+    <div class="col">
       <div class="card h-100">
-        <img src="public/assets/img/francia.jpg" class="card-img-top" alt="Camiseta">
-        <div class="card-body d-flex flex-column">
+        <img src="<?= base_url('public/assets/img/francia.jpg') ?>" class="card-img-top" alt="Camiseta Francia Zidane">
+        <div class="card-body">
           <h5 class="card-title">Camiseta Clásica 90's</h5>
           <p class="card-text">Revive los mejores momentos del fútbol con esta camiseta icónica de los años 90.</p>
-          <p class="card-text fw-bold">$59000.99</p>
-          <button class="btn btn-success mt-auto">Agregar al carrito</button>
+          <p><strong>$59000.99</strong></p>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-sm btn-success">
+            <i class="bi bi-cart-plus"></i> Agregar
+          </button>
         </div>
       </div>
     </div>
-    <!-- tarjeta -->
-    <div class="col-sm-6 col-md-4 mb-3">
+
+    <!-- CARD 3 -->
+    <div class="col">
       <div class="card h-100">
-        <img src="public/assets/img/brazil.jpg" class="card-img-top" alt="Camiseta">
-        <div class="card-body d-flex flex-column">
+        <img src="<?= base_url('public/assets/img/brazil.jpg') ?>" class="card-img-top" alt="Camiseta Brasil Ronaldo">
+        <div class="card-body">
           <h5 class="card-title">Camiseta Clásica 90's</h5>
           <p class="card-text">Revive los mejores momentos del fútbol con esta camiseta icónica de los años 90.</p>
-          <p class="card-text fw-bold">$59000.99</p>
-          <button class="btn btn-success mt-auto">Agregar al carrito</button>
+          <p><strong>$59000.99</strong></p>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-sm btn-success">
+            <i class="bi bi-cart-plus"></i> Agregar
+          </button>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- VER MÁS -->
+  <div class="text-center mt-4">
+    <a href="<?= base_url('/tienda') ?>" class="btn btn-outline-primary">
+      Ver más productos
+    </a>
   </div>
 </div>

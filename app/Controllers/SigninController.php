@@ -3,51 +3,74 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
-use CodeIgniter\Controller;
+use App\Controllers\BaseController;
 
-class SigninController extends Controller
+class SigninController extends BaseController
 {
     public function index()
     {
-        $data['titulo'] = 'Iniciar Sesión';
+        // Si ya está logueado, redirige a perfil o admin
+        if (session()->get('id_usuario')) {
+            if (session()->get('perfil_id') == 1) {
+                return redirect()->to('/admin');
+            } else {
+                return redirect()->to('/profile');
+            }
+        }
+
+        $data['titulo'] = 'Login';
 
         echo view('front/head_view', $data);
         echo view('front/navbar_view');
-        echo view('back/usuario/login', $data);
+        echo view('back/usuario/login');
         echo view('front/footer_view');
     }
 
     public function loginAuth()
     {
         $session = session();
-        $userModel = new UserModel();
+        $model = new UserModel();
 
-        $userOrEmail = $this->request->getVar('usuario');
-        $password = $this->request->getVar('pass');
+        $usuario = $this->request->getVar('usuario');
+        $pass    = $this->request->getVar('pass');
 
-        $user = $userModel->where('usuario', $userOrEmail)
-                          ->orWhere('email', $userOrEmail)
-                          ->first();
+        $data = $model
+            ->where('usuario', $usuario)
+            ->orWhere('email', $usuario)
+            ->first();
 
-        if ($user && password_verify($password, $user['pass'])) {
-            $sessionData = [
-                'id_usuario' => $user['id_usuario'],
-                'usuario'    => $user['usuario'],
-                'nombre'     => $user['nombre'],
-                'perfil_id'  => $user['perfil_id'],
-                'logged_in'  => true
-            ];
-            $session->set($sessionData);
-            return redirect()->to('/profile');
+        if ($data) {
+            if (password_verify($pass, $data['pass'])) {
+                $session->set([
+                    'id_usuario' => $data['id_usuario'],
+                    'usuario'    => $data['usuario'],
+                    'nombre'     => $data['nombre'],
+                    'perfil_id'  => $data['perfil_id'],
+                    'logged_in'  => true
+                ]);
+
+                // Redirige según el perfil
+                if ($data['perfil_id'] == 1) {
+                    return redirect()->to('/admin');
+                } else {
+                    return redirect()->to('/profile');
+                }
+
+            } else {
+                // Contraseña incorrecta
+                $session->setFlashdata('error', 'Contraseña incorrecta.');
+                return redirect()->to('/login');
+            }
+        } else {
+            // Usuario o email no encontrado
+            $session->setFlashdata('error', 'Usuario o email no encontrados.');
+            return redirect()->to('/login');
         }
-
-        $session->setFlashdata('error', 'Usuario o contraseña incorrectos');
-        return redirect()->to('/login');
     }
 
     public function logout()
     {
         session()->destroy();
-        return redirect()->to('/login');
+        return redirect()->to('/');
     }
 }

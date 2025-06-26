@@ -21,18 +21,19 @@
             </form>
 
             <ul class="navbar-nav mb-2 mb-lg-0">
-                <?php if (session()->get('logged_in')): ?>
+                <?php if (session()->get('id_usuario')) : ?>
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="<?= base_url('/logout') ?>">
-                            <i class="bi bi-box-arrow-right me-1"></i> Cerrar sesión
-                        </a>
-                    </li>
-                <?php else: ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('/registro') ?>">Registrarse</a>
+                        <a class="nav-link text-light" href="<?= base_url('/profile') ?>">Mi Perfil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= base_url('/login') ?>">Login</a>
+                        <a class="nav-link text-danger" href="<?= base_url('/logout') ?>">Cerrar sesión</a>
+                    </li>
+                <?php else : ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="<?= base_url('/registro') ?>">Registrarse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="<?= base_url('/login') ?>">Login</a>
                     </li>
                 <?php endif; ?>
             </ul>

@@ -3,17 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
-use App\Models\Perfiles_model;
-use CodeIgniter\Controller;
 
-class SignupController extends Controller
+class SignupController extends BaseController
 {
-    protected $helpers = ['form', 'url'];
-
     public function index()
     {
-        helper(['form', 'url']);
-        $perfilModel = new Perfiles_model();
+        // Si ya hay sesión iniciada, redirigir a perfil
+        if (session()->get('id_usuario')) {
+            return redirect()->to('/profile');
+        }
+
+        $perfilModel = new \App\Models\Perfiles_model();
         $data['titulo'] = 'Registro';
         $data['perfiles'] = $perfilModel->findAll();
 
@@ -25,7 +25,8 @@ class SignupController extends Controller
 
     public function store()
     {
-        helper(['form', 'url']);
+        helper(['form']);
+
         $rules = [
             'nombre'   => 'required|min_length[3]',
             'apellido' => 'required|min_length[3]|max_length[25]',
@@ -35,7 +36,7 @@ class SignupController extends Controller
         ];
 
         if (!$this->validate($rules)) {
-            $perfilModel = new Perfiles_model();
+            $perfilModel = new \App\Models\Perfiles_model();
             $data['titulo'] = 'Registro';
             $data['validation'] = $this->validator;
             $data['perfiles'] = $perfilModel->findAll();
@@ -45,15 +46,14 @@ class SignupController extends Controller
             echo view('back/usuario/registro', $data);
             echo view('front/footer_view');
         } else {
-            $model = new UserModel();
-            $model->save([
-                'nombre'     => $this->request->getVar('nombre'),
-                'apellido'   => $this->request->getVar('apellido'),
-                'usuario'    => $this->request->getVar('usuario'),
-                'email'      => $this->request->getVar('email'),
-                'pass'       => password_hash($this->request->getVar('pass'), PASSWORD_DEFAULT),
-                'perfil_id'  => 2,
-                'baja'       => 'NO'
+            $userModel = new UserModel();
+            $userModel->save([
+                'nombre'    => $this->request->getVar('nombre'),
+                'apellido'  => $this->request->getVar('apellido'),
+                'usuario'   => $this->request->getVar('usuario'),
+                'email'     => $this->request->getVar('email'),
+                'pass'      => password_hash($this->request->getVar('pass'), PASSWORD_DEFAULT),
+                'perfil_id' => 2 // por defecto usuario normal
             ]);
 
             session()->setFlashdata('success', 'Usuario registrado con éxito');
